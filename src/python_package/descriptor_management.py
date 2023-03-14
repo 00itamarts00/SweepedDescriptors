@@ -1,50 +1,47 @@
+import cv2
 import numpy as np
 import spacy
-import cv2
-
-nlp = spacy.load("en_core_web_sm")
-
-
+from rich.console import Console
+from rich.prompt import Prompt
+from torch import nn
 
 
-def detect_descriptive_words(Sentence):
-    # Input: a sentence
-    # Output: a list of descriptive words in the sentence, using spacy
-    doc = nlp(Sentence)
-    descriptive = []
-    for token in doc:
-        if token.pos_ == 'ADJ' or token.pos_ == 'ADV' or token.pos_ == 'VERB':
-            descriptive.append(token.text)
-    # return the list of descriptive words and their indices
-    # if descriptive is empty, return an empty lists
-    if len(descriptive) == 0:
-        return [], []
-    indices = np.argwhere(np.isin(Sentence.split(' '), descriptive))[0]
-    return descriptive, indices
+class DescriptorDetector(nn.Module):
+    def __init__(self) -> None:
+        self.console = Console()
+        self.nlp = spacy.load("en_core_web_sm")
+        super().__init__()
+
+    def prompt_user(self):
+        prompt = f"Enter a sentence to animate the descriptors"
+        sentence = Prompt.ask(f":rocket: {prompt}", default=5)
+        return sentence
+    
+    def cprint(self, msg, style=None):
+        self.console.print(f'{msg}', style=style)
+
+    def forward(self, sentence=None):
+        descriptors = []
+        while len(descriptors) == 0:
+            sentence = self.prompt_user()
+            descriptors = self.get_descriptive_words(sentence=sentence)
+            if len(descriptors) ==0:
+                self.console.print(f"The sentence is void of descriptive words! input a different sentence", style="bold yellow")
+        self.cprint(msg=f'The descriptors are: {descriptors}', style='green')
+        return descriptors
+
+    def get_descriptive_words(self, sentence):
+        doc = self.nlp(sentence)
+        descriptive = []
+        for token in doc:
+            if token.pos_ == 'ADJ' or token.pos_ == 'ADV' or token.pos_ == 'VERB':
+                descriptive.append(token.text)
+        # return the list of descriptive words and their indices
+        # if descriptive is empty, return an empty lists
+        # indices = np.argwhere(np.isin(sentence.split(' '), descriptive))[0]
+        return descriptive
 
 
 if __name__ == '__main__':
-    # Part 1: Detect descriptive words from a sentence (user input)
-
-    # get sentence from user
-    sentence = "A cat with a hat is lying on a beach chair"
-    # sentence = input("Enter a sentence: ")
-    # get descriptive words
-    descriptive_words, indices_dw = detect_descriptive_words(sentence)
-    # print the sentence and the descriptive words
-    print("The sentence is: ", sentence)
-    print("The descriptive words are: ", descriptive_words)
-
-    # Part 2: Generate images using diffusion models
-    images = []
-    # TODO: create more images using diffusion models
-
-    # Part 3: create a gif or video from the images
-    height, width, layers = images[0].shape
-    size = (width, height)
-    frame_rate = 2
-    out = cv2.VideoWriter(f'scene.avi', cv2.VideoWriter_fourcc(*'DIVX'), frame_rate, size)
-    for i in range(len(images)):
-        out.write(images[i])
-    out.release()
-
+    desc_man = DescriptorDetector()
+    descriptors = desc_man.forward()
