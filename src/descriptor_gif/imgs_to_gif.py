@@ -1,10 +1,11 @@
+from typing import List
+
 import cv2
 import numpy as np
 import spacy
 from rich.console import Console
 from rich.prompt import Prompt
 from torch import nn
-from typing import List
 
 
 class Imgs2Gif(nn.Module):

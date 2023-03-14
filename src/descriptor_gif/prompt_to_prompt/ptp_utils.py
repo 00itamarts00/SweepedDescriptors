@@ -12,12 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from typing import Callable, Dict, List, Optional, Tuple, Union
+
+import cv2
 import numpy as np
 import torch
-from PIL import Image, ImageDraw, ImageFont
-import cv2
-from typing import Optional, Union, Tuple, List, Callable, Dict
 from IPython.display import display
+from PIL import Image, ImageDraw, ImageFont
 from tqdm.notebook import tqdm
 
 
