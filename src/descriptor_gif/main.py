@@ -1,6 +1,6 @@
+import cv2
 import numpy as np
 import spacy
-import cv2
 
 nlp = spacy.load("en_core_web_sm")
 

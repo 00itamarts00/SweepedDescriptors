@@ -1,5 +1,5 @@
 import abc
-from typing import List
+from typing import List, Optional, Tuple, Union
 
 import numpy as np
 import torch
@@ -7,7 +7,7 @@ import torch.nn.functional as nnf
 from diffusers import DiffusionPipeline
 from IPython.display import display
 from PIL import Image
-from prompt_to_prompt import ptp_utils, seq_aligner
+from prompt_to_prompt import ptp_functional, ptp_utils, seq_aligner
 from rich.console import Console
 from rich.prompt import Prompt
 from torch import nn
@@ -44,13 +44,14 @@ class Prompt2Img(nn.Module):
 
     def cprint(self, msg, style=None):
         self.console.print(f'{msg}', style=style)
+        
+
 
     def forward(self, prompt: str, descriptors: List[str]):
-        pass
-    #     prompts = ["A photo of a tree branch at blossom"] * 4
-    #     equalizer = get_equalizer(prompts[0], word_select=("blossom",), values=(.5, .0, -.5))
-    #     controller = AttentionReweight(prompts, NUM_DIFFUSION_STEPS, cross_replace_steps=1., self_replace_steps=.2, equalizer=equalizer)
-    #     _ = run_and_display(prompts, controller, latent=x_t, run_baseline=False)
+        prompts = [prompt] * len(descriptors)
+        equalizer = ptp_functional.get_equalizer(prompts[0], word_select=("blossom",), values=(.5, .0, -.5))
+        controller = ptp_functional.AttentionReweight(prompts, self.num_diffusion_steps, cross_replace_steps=1., self_replace_steps=.2, equalizer=equalizer)
+        _ = run_and_display(prompts, controller, latent=x_t, run_baseline=False)
 
 
 if __name__ == '__main__':
