@@ -5,7 +5,7 @@ import cv2
 nlp = spacy.load("en_core_web_sm")
 
 
-def Detect_descriptive_words(Sentence):
+def detect_descriptive_words(Sentence):
     # Input: a sentence
     # Output: a list of descriptive words in the sentence, using spacy
     doc = nlp(Sentence)
@@ -28,7 +28,7 @@ if __name__ == '__main__':
     sentence = "A cat with a hat is lying on a beach chair"
     # sentence = input("Enter a sentence: ")
     # get descriptive words
-    descriptive_words, indices_dw = Detect_descriptive_words(sentence)
+    descriptive_words, indices_dw = detect_descriptive_words(sentence)
     # print the sentence and the descriptive words
     print("The sentence is: ", sentence)
     print("The descriptive words are: ", descriptive_words)
