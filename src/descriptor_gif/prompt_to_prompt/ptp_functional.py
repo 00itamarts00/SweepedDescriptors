@@ -1,5 +1,5 @@
 import abc
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Dict, List, Optional, Tuple, Union, Callable
 
 import numpy as np
 import ptp_utils
@@ -262,7 +262,7 @@ def show_cross_attention(prompts,
                          res: int,
                          from_where: List[str],
                          select: int = 0,
-                         tokenizer):
+                         tokenizer=None):
     tokens = tokenizer.encode(prompts[select])
     decoder = tokenizer.decode
     attention_maps = aggregate_attention(
@@ -296,3 +296,34 @@ def show_self_attention_comp(attention_store: AttentionStore, res: int, from_whe
         image = np.array(image)
         images.append(image)
     ptp_utils.view_images(np.concatenate(images, axis=1))
+
+def sort_by_eq(eq):
+    def inner_(images):
+        swap = 0
+        if eq[-1] < 1:
+            for i in range(len(eq)):
+                if eq[i] > 1 and eq[i + 1] < 1:
+                    swap = i + 2
+                    break
+        else:
+             for i in range(len(eq)):
+                if eq[i] < 1 and eq[i + 1] > 1:
+                    swap = i + 2
+                    break
+        print(swap)
+        if swap > 0:
+            images = np.concatenate([images[1:swap], images[:1], images[swap:]], axis=0)
+        return images
+    return inner_
+
+
+def run_and_display(prompts, controller, ldm, latent=None, run_baseline=True, callback:Optional[Callable[[np.ndarray], np.ndarray]] = None, generator=None):
+    if run_baseline:
+        print("w.o. prompt-to-prompt")
+        images, latent = run_and_display(prompts, EmptyControl(), latent=latent, run_baseline=False)
+        print("results with prompt-to-prompt")
+    images, x_t = ptp_utils.text2image_ldm(ldm, prompts, controller, latent=latent, num_inference_steps=NUM_DIFFUSION_STEPS, guidance_scale=GUIDANCE_SCALE, generator=generator)
+    if callback is not None:
+        images = callback(images)
+    ptp_utils.view_images(images)
+    return images, x_t
