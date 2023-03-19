@@ -8,9 +8,9 @@ from torch import nn
 
 class DescriptorDetector(nn.Module):
     def __init__(self) -> None:
+        super().__init__()
         self.console = Console()
         self.nlp = spacy.load("en_core_web_sm")
-        super().__init__()
 
     def prompt_user(self):
         prompt = f"Enter a sentence to animate the descriptors"
@@ -21,13 +21,14 @@ class DescriptorDetector(nn.Module):
         self.console.print(f'{msg}', style=style)
 
     def forward(self, sentence=None):
-        descriptors = []
-        while len(descriptors) == 0:
+        if sentence is None:
             sentence = self.prompt_user()
+        else:
             descriptors = self.get_descriptive_words(sentence=sentence)
-            if len(descriptors) ==0:
-                self.console.print(f"The sentence is void of descriptive words! input a different sentence", style="bold yellow")
-        self.cprint(msg=f'The descriptors are: {descriptors}', style='green')
+        if len(descriptors) ==0:
+            self.console.print(f"The sentence is void of descriptive words! input a different sentence", style="bold yellow")
+        else:
+            self.cprint(msg=f'The descriptors are: {descriptors}', style='green')
         return descriptors
 
     def get_descriptive_words(self, sentence):

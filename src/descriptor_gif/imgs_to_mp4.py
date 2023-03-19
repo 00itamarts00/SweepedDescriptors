@@ -8,9 +8,10 @@ from rich.prompt import Prompt
 from torch import nn
 
 
-class Imgs2Gif(nn.Module):
-    def __init__(self) -> None:
+class Imgs2Vid(nn.Module):
+    def __init__(self, fps=30) -> None:
         self.console = Console()
+        self.fps = fps
         super().__init__()
 
     def prompt_user(self):
@@ -21,26 +22,23 @@ class Imgs2Gif(nn.Module):
     def cprint(self, msg, style=None):
         self.console.print(f'{msg}', style=style)
 
-    def forward(self, imgs: List[np.ndarray], destination=None):
-        assert destination is not None, self.cprint(
-            "Please insert valid sestination for gif", style="bold red on white")
-        assert len(imgs) != 0, self.cprint(
-            "Image list is empty!", style="bold red on white")
-        height, width, _ = imgs[0].shape
-        size = (width, height)
-        frame_rate = 1
-        out = cv2.VideoWriter(
-            f'{destination}', cv2.VideoWriter_fourcc(*'DIVX'), frame_rate, size)
-        for i in range(len(imgs)):
-            out.write(imgs[i])
-        out.release()
-        self.cprint(
-            msg=f'Succesfully saved gif to {destination}', style='green')
+    def forward(self, vid: List[np.ndarray], destination=None):
+        self.cprint(msg=f'Converting images to MP4 video')
+        assert destination is not None, self.cprint("Please insert valid sestination for gif", style="bold red on white")
+        assert len(vid) != 0, self.cprint("Image list is empty!", style="bold red on white")
+        
+        fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
+        video_writer = cv2.VideoWriter(destination, fourcc, float(self.fps), (224, 224))
+
+        for frame in vid:
+            video_writer.write(frame)
+
+        video_writer.release()
+        self.cprint(msg=f'Done Converting images to MP4 video!!')
 
 
 if __name__ == '__main__':
-    img2gif = Imgs2Gif()
+    img2vid = Imgs2Vid()
     a = np.random.randint(low=0, high=255, size=(
         20, 224, 224, 3)).astype(np.uint8)
-    img2gif.forward(
-        a, destination='/Users/itamar/Git/SweepedDescriptors/test.avi')
+    img2vid.forward(a, destination='/Users/itamar/Git/SweepedDescriptors/test.avi')

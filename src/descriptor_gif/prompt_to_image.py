@@ -29,8 +29,7 @@ class Prompt2Img(nn.Module):
     def setup(self):
         self.device = torch.device(
             'cuda:0') if torch.cuda.is_available() else torch.device('cpu')
-        self.ldm = DiffusionPipeline.from_pretrained(
-            self.model_id).to(self.device)
+        self.ldm = DiffusionPipeline.from_pretrained(self.model_id).to(self.device)
         self.tokenizer = self.ldm.tokenizer
         self.console = Console()
 
