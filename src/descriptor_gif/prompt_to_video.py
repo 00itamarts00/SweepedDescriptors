@@ -37,17 +37,18 @@ class Prompt2VID(nn.Module):
     def cprint(self, msg, style=None):
         self.console.print(f'{msg}', style=style)
 
-    def forward(self, prompt: str):
+    def forward(self, prompt: str, destination:str):
         descriptors = self.descriptor_detection(sentence=prompt)
         self.cprint(f'Using descriptor {descriptors[0]} for Prompt to Video')
         descriptor = descriptors[0]
         keyframes = self.prompt2imgs(
             prompt, descriptor=descriptor, clip_len=self.num_keyframes)
         video = self.interp_keyframes(keyframes)
-        self.imgs2vid(video, destination=os.getcwd())
+        self.imgs2vid(video, destination=destination)
 
 
 if __name__ == '__main__':
     p2vid = Prompt2VID()
     prompt = "A photo of a fluffy doll"
-    imgs = p2vid.forward(prompt)
+    destination='/Users/itamar/Git/SweepedDescriptors/fluf.mp4'
+    imgs = p2vid.forward(prompt, destination=destination)
