@@ -2,8 +2,6 @@ import abc
 from typing import Dict, List, Optional, Tuple, Union, Callable
 
 import numpy as np
-import ptp_utils
-import seq_aligner
 import torch
 import torch.nn.functional as nnf
 from PIL import Image
