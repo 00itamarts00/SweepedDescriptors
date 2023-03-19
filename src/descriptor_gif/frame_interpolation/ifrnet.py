@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from ifrnet_loss import *
+from frame_interpolation.ifrnet_loss import *
 
 
 def warp(img, flow):
