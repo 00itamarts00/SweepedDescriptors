@@ -12,10 +12,7 @@ class InterpolateKeyframes(nn.Module):
         self.console = Console()
         self.video_frames = video_frames
         self.method = method
-        super().__init__()
-        
-    def setup(self):
-        
+        super().__init__()        
 
     def prompt_user(self):
         prompt = f"Enter a sentence to animate the descriptors"
@@ -27,6 +24,7 @@ class InterpolateKeyframes(nn.Module):
 
     def forward_firnet(self, keyframes: List[np.ndarray]):
         self.cprint(f'Interpolating the {len(keyframes)} keyframes')
+        
         
         
 
