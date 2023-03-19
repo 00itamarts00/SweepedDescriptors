@@ -44,11 +44,13 @@ class Prompt2VID(nn.Module):
         keyframes = self.prompt2imgs(
             prompt, descriptor=descriptor, clip_len=self.num_keyframes)
         video = self.interp_keyframes(keyframes)
+        import numpy as np
+        np.save(destination, video)
         self.imgs2vid(video, destination=destination)
 
 
 if __name__ == '__main__':
     p2vid = Prompt2VID()
-    prompt = "A photo of a fluffy doll"
-    destination='/Users/itamar/Git/SweepedDescriptors/fluf.mp4'
+    prompt = "A painting of a squirrel under a tree full of leaves"
+    destination='tree.avi'
     imgs = p2vid.forward(prompt, destination=destination)
