@@ -51,6 +51,6 @@ class Prompt2VID(nn.Module):
 
 if __name__ == '__main__':
     p2vid = Prompt2VID()
-    prompt = "A painting of a squirrel under a tree full of leaves"
+    prompt = "A tree full of leaves"
     destination='tree.avi'
     imgs = p2vid.forward(prompt, destination=destination)
