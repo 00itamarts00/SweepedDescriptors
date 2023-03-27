@@ -1,4 +1,5 @@
 
+import numpy as np
 import torch
 from diffusers import DiffusionPipeline
 from prompt_to_prompt import ptp_functional, ptp_utils
@@ -29,7 +30,8 @@ class Prompt2Img(nn.Module):
     def setup(self):
         self.device = torch.device(
             'cuda:0') if torch.cuda.is_available() else torch.device('cpu')
-        self.ldm = DiffusionPipeline.from_pretrained(self.model_id).to(self.device)
+        self.ldm = DiffusionPipeline.from_pretrained(
+            self.model_id).to(self.device)
         self.tokenizer = self.ldm.tokenizer
         self.console = Console()
 
@@ -63,8 +65,9 @@ class Prompt2Img(nn.Module):
         prompts = [prompt] * clip_len
         latent, latents = self.get_baseline_latent_init(prompt)
 
+        attn_values = np.linspace(-0.5, 0.5, clip_len - 1)
         equalizer = ptp_functional.get_equalizer(prompts[0], word_select=(
-            descriptor), values=(.5, .0, -.5), tokenizer=self.ldm.tokenizer)
+            descriptor), values=tuple(attn_values), tokenizer=self.ldm.tokenizer)
         controller = ptp_functional.AttentionReweight(
             prompts, self.num_diffusion_steps, cross_replace_steps=1., self_replace_steps=.2, equalizer=equalizer)
         x_t = latent
@@ -76,4 +79,5 @@ class Prompt2Img(nn.Module):
 if __name__ == '__main__':
     p2gif = Prompt2Img()
     prompt = "A photo of a tree branch at blossom"
-    imgs = p2gif.forward(prompt, 'blossom')
+    imgs = p2gif.forward(prompt, 'blossom', clip_len=3)
+    np.save('test_imgs.npy', imgs)
