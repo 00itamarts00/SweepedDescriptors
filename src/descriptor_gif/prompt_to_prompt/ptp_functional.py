@@ -7,6 +7,7 @@ import torch.nn.functional as nnf
 from PIL import Image
 from prompt_to_prompt import ptp_utils, seq_aligner
 
+from .ptp_utils import IMG_SIZE
 
 class LocalBlend:
     def __init__(self, prompts: List[str], words, threshold: float = .3, device: str = 'cpu', tokenizer=None, max_number_of_words=77):
@@ -271,7 +272,7 @@ def show_cross_attention(prompts,
         image = 255 * image / image.max()
         image = image.unsqueeze(-1).expand(*image.shape, 3)
         image = image.numpy().astype(np.uint8)
-        image = np.array(Image.fromarray(image).resize((256, 256)))
+        image = np.array(Image.fromarray(image).resize((IMG_SIZE, IMG_SIZE)))
         image = ptp_utils.text_under_image(image, decoder(int(tokens[i])))
         images.append(image)
     ptp_utils.view_images(np.stack(images, axis=0))
@@ -290,7 +291,7 @@ def show_self_attention_comp(attention_store: AttentionStore, res: int, from_whe
         image = 255 * image / image.max()
         image = np.repeat(np.expand_dims(image, axis=2),
                           3, axis=2).astype(np.uint8)
-        image = Image.fromarray(image).resize((256, 256))
+        image = Image.fromarray(image).resize((IMG_SIZE, IMG_SIZE))
         image = np.array(image)
         images.append(image)
     ptp_utils.view_images(np.concatenate(images, axis=1))
