@@ -20,11 +20,11 @@ See at [Paper](https://colab.research.google.com/drive/1eIVgC8H8Ftmv0AliiLAv0U_G
 
 ### Results
 For generate video, use *Tprompt_to_video.py* with relevant arguments:
-	[-] prompt (required)
-	[-] exp_header (required): Name of experiment, results will be saved in folder with this name.
-	[-] dest_words (optional): You can specify word(s) to be sweeped. If skiped, our algorithm will detect them.
-	[-] num_kf (default: 4): number of keyframes.
-	[-] attn_value_min/max (default: -0.5/0.5): range of weights for dest words.
+	[x] prompt (required)
+	[x] exp_header (required): Name of experiment, results will be saved in folder with this name.
+	[x] dest_words (optional): You can specify word(s) to be sweeped. If skiped, our algorithm will detect them.
+	[x] num_kf (default: 4): number of keyframes.
+	[x] attn_value_min/max (default: -0.5/0.5): range of weights for dest words.
 	
 For example:
  ```
