@@ -1,11 +1,13 @@
-
-import numpy as np
 import torch
 from diffusers import DiffusionPipeline
 from prompt_to_prompt import ptp_functional, ptp_utils
 from rich.console import Console
 from rich.prompt import Prompt
 from torch import nn
+import numpy as np
+
+IDMNET_PRETRAINED_WEIGHTS = 'SweepedDescriptors-main/pretrained_models/LDM'
+IMG_SIZE = 512
 
 
 class Prompt2Img(nn.Module):
@@ -14,12 +16,16 @@ class Prompt2Img(nn.Module):
                  num_diffusion_steps=50,
                  guidance_scale=5.,
                  max_num_workds=77,
-                 image_size=[256, 256],
+                 image_size=[IMG_SIZE, IMG_SIZE],
+                 attn_value_min=-.5,
+                 attn_value_max=.5,
                  ) -> None:
 
         self.model_id = model_id
         self.num_diffusion_steps = num_diffusion_steps
         self.guidance_scale = guidance_scale
+        self.attn_value_min = attn_value_min
+        self.attn_value_max = attn_value_max
         self.max_num_workds = max_num_workds
         self.image_size = image_size
         self.x_t = None
@@ -30,8 +36,7 @@ class Prompt2Img(nn.Module):
     def setup(self):
         self.device = torch.device(
             'cuda:0') if torch.cuda.is_available() else torch.device('cpu')
-        self.ldm = DiffusionPipeline.from_pretrained(
-            self.model_id).to(self.device)
+        self.ldm = DiffusionPipeline.from_pretrained(IDMNET_PRETRAINED_WEIGHTS).to(self.device)
         self.tokenizer = self.ldm.tokenizer
         self.console = Console()
 
@@ -65,7 +70,7 @@ class Prompt2Img(nn.Module):
         prompts = [prompt] * clip_len
         latent, latents = self.get_baseline_latent_init(prompt)
 
-        attn_values = np.linspace(-0.5, 0.5, clip_len - 1)
+        attn_values = np.linspace(self.attn_value_min, self.attn_value_max, clip_len - 1)
         equalizer = ptp_functional.get_equalizer(prompts[0], word_select=(
             descriptor), values=tuple(attn_values), tokenizer=self.ldm.tokenizer)
         controller = ptp_functional.AttentionReweight(
@@ -80,4 +85,3 @@ if __name__ == '__main__':
     p2gif = Prompt2Img()
     prompt = "A photo of a tree branch at blossom"
     imgs = p2gif.forward(prompt, 'blossom', clip_len=3)
-    np.save('test_imgs.npy', imgs)
