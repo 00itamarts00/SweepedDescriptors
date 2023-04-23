@@ -19,16 +19,16 @@ bash install.sh
 See at [Paper](https://colab.research.google.com/drive/1eIVgC8H8Ftmv0AliiLAv0U_GQgRugi28) for full report.
 
 ### Results
-For generate video, use *Tprompt_to_video.py* with relevant arguments:
-- [x] prompt (required)
+For generate video, use *prompt_to_video.py* with relevant arguments:
+- [ ] prompt (required)
 
-- [x] exp_header (required): Name of experiment, results will be saved in folder with this name.
+- [ ] exp_header (required): Name of experiment, results will be saved in folder with this name.
 
-- [x] dest_words (optional): You can specify word(s) to be sweeped. If skiped, our algorithm will detect them.
+- [ ] dest_words (optional): You can specify word(s) to be sweeped. If skiped, our algorithm will detect them.
 
-- [x] num_kf (default: 4): number of keyframes.
+- [ ] num_kf (default: 4): number of keyframes.
 
-- [x] attn_value_min/max (default: -0.5/0.5): range of weights for dest words.
+- [ ] attn_value_min/max (default: -0.5/0.5): range of weights for dest words.
 	
 For example:
  ```
