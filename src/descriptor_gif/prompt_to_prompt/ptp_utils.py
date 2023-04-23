@@ -21,6 +21,7 @@ from IPython.display import display
 from PIL import Image, ImageDraw, ImageFont
 from tqdm.notebook import tqdm
 
+IMG_SIZE = 512
 
 def text_under_image(image: np.ndarray, text: str, text_color: Tuple[int, int, int] = (0, 0, 0)):
     h, w, c = image.shape
@@ -106,7 +107,7 @@ def text2image_ldm(
     latent: Optional[torch.FloatTensor] = None,
 ):
     register_attention_control(model, controller)
-    height = width = 256
+    height = width = IMG_SIZE
     batch_size = len(prompt)
     
     uncond_input = model.tokenizer([""] * batch_size, padding="max_length", max_length=77, return_tensors="pt")
