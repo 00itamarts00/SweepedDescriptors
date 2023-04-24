@@ -32,6 +32,6 @@ For generate video, use *prompt_to_video.py* with relevant arguments:
 	
 For example:
  ```
-python3 --prompt blooming_mountains --exp_header blooming --num_kf 10
+python3 SweepedDescriptors/src/descriptor_gif/prompt_to_video.py --prompt blooming_mountains --exp_header blooming --num_kf 10
 ```
 More than 130 videos were generated and stored under [Results](https://github.com/00itamarts00/SweepedDescriptors/tree/main/results) folder.
