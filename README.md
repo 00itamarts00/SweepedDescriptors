@@ -2,6 +2,8 @@
 Official implementation of Prompt-to-Video.
 ![p2v_images](p2v_images.png)
 
+See at [Paper](https://colab.research.google.com/drive/1eIVgC8H8Ftmv0AliiLAv0U_GQgRugi28) for full report.
+
 ## Installation
 For install and running this repo:
 
@@ -15,10 +17,7 @@ python3 -m pip install requirements.txt
 bash install.sh
 ```
 
-### Paper
-See at [Paper](https://colab.research.google.com/drive/1eIVgC8H8Ftmv0AliiLAv0U_GQgRugi28) for full report.
-
-### Results
+## Results
 For generate video, use *prompt_to_video.py* with relevant arguments:
 - [ ] prompt (required)
 
