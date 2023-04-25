@@ -2,7 +2,7 @@
 Official implementation of Prompt-to-Video.
 ![p2v_images](p2v_images.png)
 
-See at [Paper](https://colab.research.google.com/drive/1eIVgC8H8Ftmv0AliiLAv0U_GQgRugi28) for full report.
+See at [Paper](https://github.com/00itamarts00/SweepedDescriptors/blob/main/P2V.pdf) for full report.
 
 ## Installation
 For install and running this repo:
