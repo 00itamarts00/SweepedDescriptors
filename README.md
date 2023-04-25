@@ -2,7 +2,7 @@
 Official implementation of Prompt-to-Video.
 ![p2v_images](p2v_images.png)
 
-See at [Paper](https://github.com/00itamarts00/SweepedDescriptors/blob/main/P2V.pdf) for full report.
+The full report can be found at [Paper](https://github.com/00itamarts00/SweepedDescriptors/blob/main/P2V.pdf).
 
 ## Installation
 For install and running this repo:
